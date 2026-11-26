@@ -1,6 +1,12 @@
 <div align="center">
 
-# Wild Kernels for Android devices running GKI 2.0 (5.10+)
+# NX769J FinaSU + SUSFS GKI build (6.1.90)
+
+Forked from [WildKernels/GKI_KernelSU_SUSFS](https://github.com/WildKernels/GKI_KernelSU_SUSFS). Fixed profile: RedMagic 9 (NX769J), third-party HyperOS4 / Android 17, Android 14 GKI family / Linux 6.1.90 / 2024-08, FinaSU root. Upstream SUSFS and other feature defaults are retained.
+
+The workflow builds the GPL-2.0 Tango32 Linux kernel module from pinned upstream source and includes `tango32.ko` in the AnyKernel3 artifact. The ROM must already provide Tango userspace/runtime integration; the kernel module alone does not provide 32-bit app support. Follow the ROM's module-loading setup to install/load it. No kernel build or on-device test has yet been performed.
+
+Run **Actions → Build Kernels → Run workflow** with defaults (6.1.x-android14, 2024-08, FinaSU, 4k). This fork intentionally does not generate other kernel version matrices.
 
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 [![Third-Party Notices](https://img.shields.io/badge/notices-THIRD__PARTY_NOTICES-lightgrey.svg)](THIRD_PARTY_NOTICES.md)

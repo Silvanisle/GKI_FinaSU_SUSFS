@@ -23,27 +23,20 @@ on:
         description: "Kernel Version"
         type: choice
         options:
-          - All
-          - 5.10.x-android12
-          - 5.10.x-android13
-          - 5.15.x-android13
-          - 5.15.x-android14
           - 6.1.x-android14
-          - 6.6.x-android15
-          - 6.12.x-android16
-          - 6.18.x-android17
-        default: All
+        default: 6.1.x-android14
       os_patch_level:
-        description: "Patch date (YYYY-MM), kernel sublevel, lts, or All (no filter)"
+        description: "Fixed target patch level: 2024-08 (GKI 6.1.90 / NX769J HyperOS4)"
         required: true
-        type: string
-        default: All
+        type: choice
+        options:
+          - 2024-08
+        default: 2024-08
       page_size:
-        description: "ARM64 page size. 16k requires explicitly selecting Kernel Version 6.1.x-android14, 6.6.x-android15 or 6.12.x-android16 (All is rejected)"
+        description: "Fixed NX769J page size"
         type: choice
         options:
           - 4k
-          - 16k
         default: 4k
       brand_name:
         description: "Kernel Branding (empty = stock version string)"
@@ -62,18 +55,11 @@ on:
           - verified
         default: verified
       root_flavor:
-        description: "Root Flavor"
+        description: "Root Flavor (fixed to FinaSU)"
         type: choice
         options:
-          - KernelSU-Next
-          - KernelSU
-          - BakaSU
-          - SukiSU-Ultra
-          - KowSU
           - FinaSU
-          - No Root
-          - All (KernelSU-Next + KernelSU + BakaSU)
-        default: All (KernelSU-Next + KernelSU + BakaSU)
+        default: FinaSU
       use_susfs:
         description: "SUSFS"
         type: boolean
@@ -719,7 +705,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -749,7 +735,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -779,7 +765,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -809,7 +795,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -839,7 +825,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -869,7 +855,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -899,7 +885,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
@@ -934,7 +920,7 @@ jobs:
       droidspaces_commit: ${{ needs.resolve-sources.outputs.droidspaces_commit }}
       brand_name: ${{ github.event_name == 'schedule' && 'Wild' || inputs.brand_name }}
       keep_kmi: ${{ inputs.keep_kmi || false }}
-      os_patch_level: ${{ inputs.os_patch_level || 'All' }}
+      os_patch_level: ${{ inputs.os_patch_level || '2024-08' }}
       allow_version_mismatch: ${{ inputs.allow_version_mismatch || false }}
       page_size: ${{ inputs.page_size || '4k' }}
     secrets: inherit
