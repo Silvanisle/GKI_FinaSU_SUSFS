@@ -53,6 +53,19 @@ def integrate(kernel: Path, source: Path) -> None:
     if replacement.strip() not in build_file.read_text():
         raise RuntimeError("Tango32 .ko not declared in Kleaf module_implicit_outs")
 
+    # Implicit outputs are excluded from kernel_aarch64's DefaultInfo. Kleaf
+    # creates a per-output filegroup; distribute that explicit label instead of
+    # searching the bazel-bin convenience symlink or private output paths.
+    append_once(
+        build_file,
+        '    name = "tango32_dist",',
+        'copy_to_dist_dir(\n'
+        '    name = "tango32_dist",\n'
+        '    data = [":kernel_aarch64/drivers/tango32/tango32.ko"],\n'
+        '    flat = True,\n'
+        ')',
+    )
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()

@@ -473,9 +473,18 @@ jobs:
         working-directory: ${{ github.workspace }}/kernel
         run: |
           set -euo pipefail
-          module="$(find bazel-bin /home/runner/out -type f -name tango32.ko -print -quit 2>/dev/null || true)"
-          if [ -z "$module" ]; then
-            echo "tango32.ko was not produced by the GKI build" >&2
+          # Use the same configuration as Build Normal Kernel so this reuses
+          # its kernel action. The explicit filegroup exports the implicit .ko;
+          # copy_to_dist_dir avoids traversing bazel-bin (a symlink).
+          dist_dir="$PWD/out/tango32/dist"
+          rm -f "$dist_dir/tango32.ko"
+          tools/bazel run \
+            --config=fast \
+            --defconfig_fragment=//common:wild_defconfig.fragment \
+            //common:tango32_dist -- --dist_dir="$dist_dir"
+          module="$dist_dir/tango32.ko"
+          if [ ! -s "$module" ]; then
+            echo "Kleaf did not distribute tango32.ko" >&2
             exit 1
           fi
           install -D "$module" "${{ github.workspace }}/AnyKernel3/tango32.ko"

@@ -29,5 +29,8 @@ jobs:
       - name: Validate shell scripts
         run: python3 .github/scripts/validate_shell.py
 
+      - name: Test Tango32 Kleaf integration
+        run: python3 -m unittest discover -s tests -v
+
       - name: Validate Python syntax
         run: python3 .github/scripts/validate_python.py
