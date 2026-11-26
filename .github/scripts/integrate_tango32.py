@@ -38,14 +38,20 @@ def integrate(kernel: Path, source: Path) -> None:
         '        "kmi_symbol_list_strict_mode": True,\n'
         '        "module_implicit_outs": get_gki_modules_list("arm64"),\n'
     )
-    output = '        "module_outs": ["drivers/tango32/tango32.ko"],\n'
-    if output.strip() not in text:
+    replacement = (
+        '        "module_implicit_outs": get_gki_modules_list("arm64") + '
+        '["drivers/tango32/tango32.ko"],\n'
+    )
+    if replacement.strip() not in text:
         if text.count(anchor) != 1:
             raise RuntimeError(f"Expected exactly one ARM64 Kleaf config in {build_file}")
-        text = text.replace(anchor, anchor + output, 1)
+        text = text.replace(anchor, anchor.replace(
+            '"module_implicit_outs": get_gki_modules_list("arm64"),\n',
+            replacement,
+        ), 1)
         build_file.write_text(text)
-    if output.strip() not in build_file.read_text():
-        raise RuntimeError("Tango32 .ko not declared in Kleaf module_outs")
+    if replacement.strip() not in build_file.read_text():
+        raise RuntimeError("Tango32 .ko not declared in Kleaf module_implicit_outs")
 
 
 def main() -> None:
