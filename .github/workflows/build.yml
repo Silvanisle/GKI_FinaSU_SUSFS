@@ -175,26 +175,9 @@ jobs:
           test -d common/drivers
           git clone --filter=blob:none https://github.com/AmanieuSystems/tango32-module.git /tmp/tango32-module
           git -C /tmp/tango32-module checkout --detach 2d03f71f73e38f5c9c4a74eeb1c7a750e2d0403e
-          install -d common/drivers/tango32
-          cp /tmp/tango32-module/{tango32.c,tango32.h,Kconfig,Makefile} common/drivers/tango32/
-          grep -q 'source "drivers/tango32/Kconfig"' common/drivers/Kconfig || printf '\nsource "drivers/tango32/Kconfig"\n' >> common/drivers/Kconfig
-          grep -q '^obj-$(CONFIG_TANGO32) += tango32/' common/drivers/Makefile || printf '\nobj-$(CONFIG_TANGO32) += tango32/\n' >> common/drivers/Makefile
-
-      - name: Set up Go for Bazel buildozer
-        uses: actions/setup-go@v6
-        with:
-          go-version: '1.26.0'
-          cache: false
-
-      - name: Declare Tango32 as a Kleaf module output
-        shell: bash
-        working-directory: ${{ github.workspace }}/kernel
-        run: |
-          set -euo pipefail
-          go install github.com/bazel-contrib/buildtools/v10/buildozer@v10.2.0
-          export PATH="$(go env GOPATH)/bin:$PATH"
-          buildozer 'add module_outs drivers/tango32/tango32.ko' @//common:kernel_aarch64
-          grep -Fq 'drivers/tango32/tango32.ko' common/BUILD.bazel
+          python3 "${{ github.workspace }}/.github/scripts/integrate_tango32.py" \
+            --kernel "${{ github.workspace }}/kernel" \
+            --module-source /tmp/tango32-module
 
       - name: Initialize Config Fragment
         uses: ./.github/actions/initialize-config-fragment
